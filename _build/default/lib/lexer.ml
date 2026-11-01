@@ -6,7 +6,10 @@ let tokenize (source : string) : token list =
   let tokens = ref [] in
 
   let peek () =
-    String.get source !index
+    if !index < String.length source then
+      String.get source !index
+    else
+      '\000'
   in
 
   let advance () =
@@ -41,7 +44,12 @@ in
         advance ()
       done;
 
-      only_emit (Token.Ident (Buffer.contents buf))
+      let word = Buffer.contents buf in
+      (match word with
+      | "func" -> only_emit Func
+      | _ -> only_emit (Ident word))
+
+      (* only_emit (Token.Ident (Buffer.contents buf)) *)
     | ' ' | '\t' | '\n' -> advance () (* skip whitespace *)
     | c   -> emit (Token.Other (String.make 1 c))
   done;
