@@ -8,6 +8,7 @@ let read_file (file : string) : string =
     Printf.printf "An error occured %s\n" message;
     exit 1
 
+(* Run nihilist: dune exec nihilist -- ../../test.txt *)
 
 let () =
   if Array.length Sys.argv < 2 then begin

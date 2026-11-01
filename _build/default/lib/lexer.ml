@@ -42,7 +42,7 @@ in
       done;
 
       only_emit (Token.Ident (Buffer.contents buf))
-      
+    | ' ' | '\t' | '\n' -> advance () (* skip whitespace *)
     | c   -> emit (Token.Other (String.make 1 c))
   done;
 
