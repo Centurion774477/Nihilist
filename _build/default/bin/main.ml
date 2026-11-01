@@ -12,12 +12,21 @@ let read_file (file : string) : string =
 
 let () =
   if Array.length Sys.argv < 2 then begin
-      print_endline "Please provide a file to process.";
-      print_endline "Usage: nihilist <file>";
-      exit 1
+    print_endline "Please provide a file to process.";
+    print_endline "Usage: nihilist <file>";
+    exit 1
   end;
+
   let tokens = Sys.argv.(1)
   |> read_file
   |> Lexer.tokenize
   in
-  List.iter (fun token -> print_endline (Token.to_string token)) tokens
+  List.iter (fun token -> print_endline (Token.to_string token)) tokens;
+
+  let declarations = tokens
+  |> Declarations.find_declarations
+  in
+
+  print_endline "declarations:";
+  List.iter (fun declaration -> print_endline declaration) declarations
+
