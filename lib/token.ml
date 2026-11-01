@@ -1,0 +1,20 @@
+
+type token =
+  | Ident of string
+  | Bang (* ! *)
+  | LParen
+  | Dot (* . *)
+  | RParen
+  | Comma
+  | Other of string (* Literally ANY other word, symbol, operator, etc. *)
+
+(* Basically only for debugging tokens *)
+let to_string token =
+  match token with
+  | Bang -> "Bang"
+  | LParen -> "LParen"
+  | RParen -> "RParen"
+  | Dot -> "Dot"
+  | Comma -> "Comma"
+  | Ident s -> "Ident(" ^ s ^ ")"
+  | Other s -> "Other(" ^ s ^ ")"
