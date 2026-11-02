@@ -50,7 +50,8 @@ in
       | _ -> only_emit (Ident word))
 
       (* only_emit (Token.Ident (Buffer.contents buf)) *)
-    | ' ' | '\t' | '\n' -> advance () (* skip whitespace *)
+    | ' ' | '\t' -> advance () (* skip whitespace *)
+    | '\n' -> emit (Other "\n") (* preserve newlines *)
     | '"' ->
       advance ();
       let buf = Buffer.create 16 in

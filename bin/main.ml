@@ -53,7 +53,7 @@ let declarations = Declarations.find_declarations tokens in
 let result =
   Parser.parse tokens declarations
   |> Formatter.ast_walker
-  |> String.concat "\n"
+  |> String.concat ""
 in
 
 print_string result
