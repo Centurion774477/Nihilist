@@ -17,12 +17,30 @@ let () =
     exit 1
   end;
 
-  let tokens = Sys.argv.(1)
+  let command = Sys.argv.(1) in
+
+  (* print my writing on nihilism *)
+  if command = "nihilism" then begin
+    read_file "nihilism.txt"
+    |> print_endline;
+    exit 0
+  end;
+
+  let file = 
+    try Sys.argv.(2)
+    with Invalid_argument _ ->
+    print_endline "Please provide a file to process.";
+    exit 1
+  in
+
+  (* debug tokens *)
+  let tokens = file
   |> read_file
   |> Lexer.tokenize
   in
   List.iter (fun token -> print_endline (Token.to_string token)) tokens;
 
+  (* debug declarations *)
   let declarations = tokens
   |> Declarations.find_declarations
   in

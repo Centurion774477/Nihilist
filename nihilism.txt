@@ -1,0 +1,32 @@
+Nihilism is more or less a philosophical view (formally it is a family of views) that rejects any sort of objective truths
+ such as purpose, knowledge, and ethics.
+
+For some nihilists — namely epistemological nihilists — this rejection comes from the belief that nothing can be truly
+known, which is why a true and absolute nihilist would believe in nothing; they would have no loyalties, morals, or 
+boundaries.
+
+Nihilism challenges the things the world has accepted as normal — they ask questions like: “Why are bad things 
+bad?”. With that, they blatantly reject any universal truths, with a key one being any sort of religion. Religion is
+basically the antithesis of Nihilism — most religions involve morals, purpose, and ethics, all of which are rejected in 
+Nihilism.
+
+Nihilists have had quite a destructive history, being first truly seen in a loosely organized Russian revolutionary movement circa 1860-1880s,
+where they would reject authorities like the state and church. These nihilists loudly denounced God and any other form of religion, 
+claiming they are harmful to freedom.
+
+However, the roots of Nihilism can be traced as far as to the Skeptics, who would denounce traditional truths as unjustifiable opinions.
+Later nihilism would take these beliefs a bit further, dogmatically denying truths,
+compared to the Skeptics who would do so in a more sensible and curious manner.
+
+There are many different forms of nihilism: political, rejecting any and all political, social, and religious order; ethical or moral,
+rejecting absolute and dogmatic moral or ethical values; epistemological, rejecting the possibility of truth; and existential nihilism,
+which states life has no obvious meaning or value.
+
+I think Nihilism is a harmful belief on its own, especially when practiced in extreme forms, but taking ideas from it,
+such as not being afraid to question the truth, can be beneficial to your personal beliefs.
+
+I myself am not a nihilist, as I believe in morals, religion, and loyalties, but my OCaml code, titled “Nihilist”, is (to some extent) — 
+it exists to reject the boundaries and rules laid out by KrabbaScript, to allow us to write code according to our personal rules and convictions,
+instead of conforming to style dogma.
+
+— Reece Turner
