@@ -3,7 +3,7 @@ open Ast
 
 let rec ast_walker (nodes : node list) : string list =
   (* get arguments as a string from the node list *)
-  let format_args args = String.concat "," (ast_walker args) in
+  let format_args args = String.concat "" (ast_walker args) in
   
   match nodes with
   | [] -> []
@@ -23,4 +23,4 @@ let rec ast_walker (nodes : node list) : string list =
 
   (* function declaration *)
   | Raw Func :: Raw (Ident name) :: rest -> ("func " ^ name) :: ast_walker rest
-  | Raw token :: rest -> Token.to_source token :: ast_walker rest
+  | Raw token :: rest -> (Token.to_source token ^ " ") :: ast_walker rest
