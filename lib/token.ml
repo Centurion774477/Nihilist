@@ -7,7 +7,7 @@ type token =
   | RParen
   | Comma
   | Func
-  | Other of string (* Literally ANY other word, symbol, operator, etc. *)
+  | Other of string (* Literally ANY other value, symbol, operator, etc. *)
 
 (* Basically only for debugging tokens *)
 let to_string token =
