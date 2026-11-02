@@ -8,8 +8,8 @@ let read_file (file : string) : string =
     Printf.printf "An error occured %s\n" message;
     exit 1
 
-(* Run nihilist: dune exec nihilist -- ../../test.txt *)
 
+(* Run nihilist: dune exec nihilist -- ../../test.txt *)
 let () =
   if Array.length Sys.argv < 2 then begin
     print_endline "Please provide a file to process.";
@@ -24,27 +24,29 @@ let () =
     read_file "nihilism.txt"
     |> print_endline;
     exit 0
+    
   end;
 
-  let file = 
-    try Sys.argv.(2)
-    with Invalid_argument _ ->
+  let file =
+  try Sys.argv.(2)
+  with Invalid_argument _ ->
     print_endline "Please provide a file to process.";
     exit 1
-  in
+in
 
-  (* debug tokens *)
-  let tokens = file
+let tokens = file
   |> read_file
   |> Lexer.tokenize
-  in
-  List.iter (fun token -> print_endline (Token.to_string token)) tokens;
+in
 
-  (* debug declarations *)
-  let declarations = tokens
-  |> Declarations.find_declarations
-  in
+let declarations = Declarations.find_declarations tokens in
 
-  print_endline "declarations:";
-  List.iter (fun declaration -> print_endline declaration) declarations
+let result =
+  Parser.parse tokens declarations
+  |> Formatter.ast_walker
+  |> String.concat "\n"
+in
+
+print_string result
+
 

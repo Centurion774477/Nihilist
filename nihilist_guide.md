@@ -43,3 +43,15 @@ Besides that, the lexer does what any other lexer should do — there's not much
 
 The files belonging to the lexer are lexer.ml (of course) and token.ml.
 
+# Parser
+
+The parser, much like the lexer, is really simple because we consolidate every non function/method call into a single type.
+
+There are two possible function calls:
+- function!
+- function args
+
+
+
+Similarly, there are two possible ways to call a method:
+
