@@ -28,6 +28,9 @@ let rec parse tokens declarations =
   (* function call with bang — loveFinland! *)
   | Ident name :: Bang :: rest ->
     Call (name, []) :: parse rest declarations
+
+  (* function declarations *)
+  | Func :: Ident name :: rest -> Raw Func :: Raw (Ident name) :: parse rest declarations
     
   (* catchall *)
   | token :: rest -> Raw token :: parse rest declarations

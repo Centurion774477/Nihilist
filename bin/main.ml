@@ -8,8 +8,17 @@ let read_file (file : string) : string =
     Printf.printf "An error occured %s\n" message;
     exit 1
 
+let write_out file data =
+  match Out_channel.with_open_gen [Open_append; Open_creat; Open_text] 0o644 file (fun channel ->
+    Out_channel.output_string channel data) with
+  | () -> ()
+  | exception Sys_error message ->
+    Printf.printf "An error occured %s\n" message;
+    exit 1
+  
 
-(* Run nihilist: dune exec nihilist -- ../../test.txt *)
+
+(* Run nihilist: dune exec nihilist -- compile ../../test.txt *)
 let () =
   if Array.length Sys.argv < 2 then begin
     print_endline "Please provide a file to process.";

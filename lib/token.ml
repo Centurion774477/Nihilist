@@ -22,3 +22,15 @@ let to_string token =
   | Func -> "Function declaration"
   | StringLiteral s -> "Literal(" ^ s ^ ")"
   | Other s -> "Other(" ^ s ^ ")"
+
+let to_source token =
+  match token with
+  | Ident s -> s
+  | Bang -> "!"
+  | LParen -> "("
+  | RParen -> ")"
+  | Dot -> "."
+  | Comma -> ","
+  | Func -> "func"
+  | StringLiteral s -> "\"" ^ s ^ "\""
+  | Other s -> s
