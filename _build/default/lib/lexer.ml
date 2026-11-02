@@ -51,6 +51,24 @@ in
 
       (* only_emit (Token.Ident (Buffer.contents buf)) *)
     | ' ' | '\t' | '\n' -> advance () (* skip whitespace *)
+    | '"' ->
+      advance ();
+      let buf = Buffer.create 16 in
+      while peek () <> '"' do
+        Buffer.add_char buf (peek ());
+        advance ()
+      done;
+      advance ();
+      only_emit (StringLiteral (Buffer.contents buf))
+    | '\'' ->
+      advance ();
+      let buf = Buffer.create 16 in
+      while peek () <> '\'' do
+        Buffer.add_char buf (peek ());
+        advance ()
+      done;
+      advance ();
+      only_emit (StringLiteral (Buffer.contents buf))
     | c   -> emit (Token.Other (String.make 1 c))
   done;
 

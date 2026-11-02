@@ -41,5 +41,5 @@ I couldn't find any good reason to declare separate tokens for every keyword and
 
 Besides that, the lexer does what any other lexer should do — there's not much need to explain that.
 
-
+The files belonging to the lexer are lexer.ml (of course) and token.ml.
 
