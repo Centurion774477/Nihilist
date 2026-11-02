@@ -9,7 +9,7 @@ let read_file (file : string) : string =
       exit 1
 
 let write_out data file =
-  match Out_channel.with_open_gen [Open_append; Open_creat; Open_text] 0o644 file (fun channel ->
+  match Out_channel.with_open_gen [Open_creat; Open_text] 0o644 file (fun channel ->
     Out_channel.output_string channel data) with
   | () -> ()
   | exception Sys_error message ->
@@ -21,8 +21,27 @@ let write_out data file =
 (* Run nihilist: dune exec nihilist -- compile ../../test.txt *)
 let () =
   if Array.length Sys.argv < 2 then begin
-    print_endline "Please provide a file to process.";
-    print_endline "Usage: nihilist <file>";
+    (* help message *)
+    {|
+    Hey! Welcome to Nihilist!
+    In short, Nihilist is a preprocessor for KrabbaScript
+    that lets you use much more relaxed syntax than KrabbaScript.
+
+    The main feature is omitting parens with functions:
+
+    `add a, b` compiles to something like `add(a, b)`
+
+
+    Here's a list of the commands:
+
+    nihilism -> view my writing on Nihilism
+
+    * you probably want this: *
+    compile <file>   -> compile a nihilist file to KrabbaScript
+    | this will output to <file>.ks by default — you can specify an output file by passing it in:
+    | compile finland.nihilist finland.ks
+
+    |} |> print_endline;
     exit 1
   end;
 
@@ -41,23 +60,37 @@ let () =
   with Invalid_argument _ ->
     print_endline "Please provide a file to process.";
     exit 1
-in
+  in
 
-let tokens = file
-  |> read_file
-  |> Lexer.tokenize
-in
+  let tokens = file
+    |> read_file
+    |> Lexer.tokenize
+  in
 
-let declarations = Declarations.find_declarations tokens in
+  let declarations = Declarations.find_declarations tokens in
 
-let result =
-  Parser.parse tokens declarations
-  |> Formatter.ast_walker
-  |> String.concat ""
-in
+  let result =
+    Parser.parse tokens declarations
+    |> Formatter.ast_walker
+    |> String.concat ""
+  in
 
-print_string result;
+  print_string result;
 
-let output_file = "test.ks" in
-  write_out result output_file
+  (* get output file from either the user or from the existing file *)
+  let replace_ext name ext =
+  match String.rindex_opt name '.' with
+  | Some i -> String.sub name 0 i ^ ext
+  | None -> name ^ ext
+  in
+
+  let output_file =
+    try Sys.argv.(3)
+    with Invalid_argument _ -> replace_ext file ".ks"
+  in
+
+  print_endline "Output file:";
+  print_endline output_file
+
+  (* write_out result output_file *)
 
