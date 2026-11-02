@@ -17,6 +17,32 @@ let write_out data file =
       exit 1
   
 
+(* 
+tokenize, 
+find declarations,
+parse, and generate code.
+*)
+let compile file output =
+  let tokens = file
+    |> read_file
+    |> Lexer.tokenize
+  in
+
+  let declarations = Declarations.find_declarations tokens in
+
+  let result =
+    Parser.parse tokens declarations
+    |> Formatter.ast_walker
+    |> String.concat ""
+  in
+
+  print_string result;
+
+  print_endline "Output file:";
+  print_endline output
+
+  (* write_out result output *)
+
 
 (* Run nihilist: dune exec nihilist -- compile ../../test.txt *)
 let () =
@@ -37,60 +63,67 @@ let () =
     nihilism -> view my writing on Nihilism
 
     * you probably want this: *
-    compile <file>   -> compile a nihilist file to KrabbaScript
+    compile <file> -> compile a nihilist file to KrabbaScript
     | this will output to <file>.ks by default — you can specify an output file by passing it in:
     | compile finland.nihilist finland.ks
 
+    Or, you can just omit any sort of command and it will default to `compile`.
     |} |> print_endline;
     exit 1
   end;
 
+  let is_filename s = String.contains s '.' in
+
   let command = Sys.argv.(1) in
+
+  let file =
+    if is_filename command then command
+    else
+      try Sys.argv.(2)
+      with Invalid_argument _ ->
+        print_endline "Please provide a file to process.";
+        exit 1
+  in
+
+  (* get output file from either the user or from the existing file *)
+  let replace_ext name ext =
+    match String.rindex_opt name '.' with
+    | Some integer -> String.sub name 0 integer ^ ext
+    | None -> name ^ ext
+  in
+
+  let output_file =
+    if is_filename command then
+      try Sys.argv.(2)
+      with Invalid_argument _ -> replace_ext file ".ks"
+    else
+      try Sys.argv.(3)
+      with Invalid_argument _ -> replace_ext file ".ks"
+  in
+
+
+  (* 
+    if no command was passed then default to compiling 
+    
+    nihilist file.nihilist output.ks
+
+    command would become 'file.nihilist', which is how we tell if the user omitted the command.
+  *)
+  if command |> is_filename || command = "compile" then begin
+    compile file output_file
+  end;
+
+  (* 
+  parse commands normally
+  — transform this into a `match .. with` block when more commands are added
+  *)
 
   (* print my writing on nihilism *)
   if command = "nihilism" then begin
     read_file "nihilism.txt"
     |> print_endline;
     exit 0
-    
   end;
-
-  let file =
-  try Sys.argv.(2)
-  with Invalid_argument _ ->
-    print_endline "Please provide a file to process.";
-    exit 1
-  in
-
-  let tokens = file
-    |> read_file
-    |> Lexer.tokenize
-  in
-
-  let declarations = Declarations.find_declarations tokens in
-
-  let result =
-    Parser.parse tokens declarations
-    |> Formatter.ast_walker
-    |> String.concat ""
-  in
-
-  print_string result;
-
-  (* get output file from either the user or from the existing file *)
-  let replace_ext name ext =
-  match String.rindex_opt name '.' with
-  | Some i -> String.sub name 0 i ^ ext
-  | None -> name ^ ext
-  in
-
-  let output_file =
-    try Sys.argv.(3)
-    with Invalid_argument _ -> replace_ext file ".ks"
-  in
-
-  print_endline "Output file:";
-  print_endline output_file
 
   (* write_out result output_file *)
 
