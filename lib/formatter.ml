@@ -21,4 +21,6 @@ let rec ast_walker (nodes : node list) : string list =
   | MethodCall (name, mthd, args) :: rest ->
     (name ^ "." ^ mthd ^ "(" ^ format_args args ^ ")") :: ast_walker rest
 
+  (* function declaration *)
+  | Raw Func :: Raw (Ident name) :: rest -> ("func " ^ name) :: ast_walker rest
   | Raw token :: rest -> Token.to_source token :: ast_walker rest
