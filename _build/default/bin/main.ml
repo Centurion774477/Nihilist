@@ -5,16 +5,16 @@ let read_file (file : string) : string =
   match In_channel.with_open_text file In_channel.input_all with
   | contents -> contents
   | exception Sys_error message ->
-    Printf.printf "An error occured %s\n" message;
-    exit 1
+      Printf.printf "An error occured %s\n" message;
+      exit 1
 
-let write_out file data =
+let write_out data file =
   match Out_channel.with_open_gen [Open_append; Open_creat; Open_text] 0o644 file (fun channel ->
     Out_channel.output_string channel data) with
   | () -> ()
   | exception Sys_error message ->
-    Printf.printf "An error occured %s\n" message;
-    exit 1
+      Printf.printf "An error occured %s\n" message;
+      exit 1
   
 
 
@@ -56,6 +56,8 @@ let result =
   |> String.concat ""
 in
 
-print_string result
+print_string result;
 
+let output_file = "test.ks" in
+  write_out result output_file
 
