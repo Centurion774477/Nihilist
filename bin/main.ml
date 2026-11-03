@@ -49,7 +49,7 @@ let compile file output =
     |> String.concat ""
 
   
-(* Run nihilist: dune exec nihilist -- compile ../../test.txt *)
+(* Run nihilist: dune exec nihilist -- compile ../test.txt *)
 let () =
   if Array.length Sys.argv < 2 then begin
     (* help message *)
