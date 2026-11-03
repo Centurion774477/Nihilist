@@ -1,5 +1,6 @@
 
 open Nihilist
+open Token
 
 let read_file (file : string) : string =
   match In_channel.with_open_text file In_channel.input_all with
@@ -16,6 +17,12 @@ let write_out data file =
     Printf.printf "An error occurred %s\n" message;
     exit 1
   
+(* turn multiple spaces into one for easier parsing *)
+let rec collapse_spaces tokens =
+  match tokens with
+  | [] -> []
+  | Other " " :: Other " " :: rest -> collapse_spaces (Other " " :: rest)
+  | token :: rest -> token :: collapse_spaces rest
 
 (* 
 tokenize, 
@@ -26,10 +33,10 @@ let compile file output =
   let tokens = file
     |> read_file
     |> Lexer.tokenize
+    |> collapse_spaces
   in
 
   print_endline "Tokens:";
-
   tokens
   |> List.map Token.to_string
   |> List.iter print_endline;
@@ -42,8 +49,6 @@ let compile file output =
     |> String.concat ""
 
   
-
-
 (* Run nihilist: dune exec nihilist -- compile ../../test.txt *)
 let () =
   if Array.length Sys.argv < 2 then begin

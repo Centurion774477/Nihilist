@@ -3,7 +3,7 @@ open Ast
 
 let rec ast_walker (nodes : node list) : string list =
   (* get arguments as a string from the node list *)
-  let format_args args = String.concat "" (ast_walker args) in
+  let format_args args = String.concat ", " (ast_walker args) in
   
   match nodes with
   | [] -> []
