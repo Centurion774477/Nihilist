@@ -4,7 +4,7 @@
 Hey! This guide explains how to navigate Nihilist's codebase.
 
 This is primarily meant for people trying to contribute, fork, or otherwise work with the code of Nihilist.
-If you're just looking for a description of Nihilist, then you should be reading the readme instead.
+If you're just looking for a description of Nihilist, then you should look at the readme instead.
 
 # Nihilist
 
@@ -43,15 +43,12 @@ Besides that, the lexer does what any other lexer should do — there's not much
 
 The files belonging to the lexer are lexer.ml (of course) and token.ml.
 
-# Parser
+(work in progress)
 
-The parser, much like the lexer, is really simple because we consolidate every non function/method call into a single type.
+# Run Nihilist
 
-There are two possible function calls:
-- function!
-- function args
+Hopefully you have OCaml (I'm using version 5.4.1), Dune, Opam, etc set up — if not then you should figure that out first.
 
-
-
-Similarly, there are two possible ways to call a method:
+First, `dune build` Nihilist, and then run it with `dune exec nihilist -- <args>` — there's a command to compile a test file in `main.ml`, 
+although I'm not tracking the test file with Git so you'll have to write your own.
 
