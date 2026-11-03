@@ -30,7 +30,7 @@ let rec parse tokens declarations =
     Call (name, []) :: parse rest declarations
 
   (* function declarations *)
-  | Func :: Ident name :: rest -> Raw Func :: Raw (Ident name) :: parse rest declarations
+   | Func :: Ident name :: rest -> Raw Func :: Raw (Ident name) :: parse rest declarations
     
   (* catchall *)
   | token :: rest -> Raw token :: parse rest declarations

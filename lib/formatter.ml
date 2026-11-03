@@ -23,4 +23,4 @@ let rec ast_walker (nodes : node list) : string list =
 
   (* function declaration *)
   | Raw Func :: Raw (Ident name) :: rest -> ("func " ^ name) :: ast_walker rest
-  | Raw token :: rest -> (Token.to_source token ^ " ") :: ast_walker rest
+  | Raw token :: rest -> (Token.to_source token) :: ast_walker rest

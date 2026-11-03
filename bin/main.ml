@@ -9,12 +9,12 @@ let read_file (file : string) : string =
       exit 1
 
 let write_out data file =
-  match Out_channel.with_open_gen [Open_creat; Open_text] 0o644 file (fun channel ->
-    Out_channel.output_string channel data) with
-  | () -> ()
-  | exception Sys_error message ->
-      Printf.printf "An error occured %s\n" message;
-      exit 1
+  try
+    Out_channel.with_open_text file (fun channel ->
+      Out_channel.output_string channel data)
+  with Sys_error message ->
+    Printf.printf "An error occurred %s\n" message;
+    exit 1
   
 
 (* 
@@ -28,20 +28,20 @@ let compile file output =
     |> Lexer.tokenize
   in
 
-  let declarations = Declarations.find_declarations tokens in
+  print_endline "Tokens:";
 
-  let result =
+  tokens
+  |> List.map Token.to_string
+  |> List.iter print_endline;
+
+  let declarations = Declarations.find_declarations tokens in
+    print_endline "Declarations:"; List.iter print_endline declarations;
+
     Parser.parse tokens declarations
     |> Formatter.ast_walker
     |> String.concat ""
-  in
 
-  print_string result;
-
-  print_endline "Output file:";
-  print_endline output
-
-  (* write_out result output *)
+  
 
 
 (* Run nihilist: dune exec nihilist -- compile ../../test.txt *)
@@ -101,7 +101,6 @@ let () =
       with Invalid_argument _ -> replace_ext file ".ks"
   in
 
-
   (* 
     if no command was passed then default to compiling 
     
@@ -110,7 +109,8 @@ let () =
     command would become 'file.nihilist', which is how we tell if the user omitted the command.
   *)
   if command |> is_filename || command = "compile" then begin
-    compile file output_file
+    let formatted_lines = compile file output_file in
+    write_out formatted_lines output_file
   end;
 
   (* 
@@ -124,6 +124,4 @@ let () =
     |> print_endline;
     exit 0
   end;
-
-  (* write_out result output_file *)
 

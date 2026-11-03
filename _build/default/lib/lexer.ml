@@ -50,7 +50,8 @@ in
       | _ -> only_emit (Ident word))
 
       (* only_emit (Token.Ident (Buffer.contents buf)) *)
-    | ' ' | '\t' -> advance () (* skip whitespace *)
+    | ' ' -> emit (Other " ") (* preserve spaces *)
+    | '\t' -> emit (Other "\t") (* preserve tabs *)
     | '\n' -> emit (Other "\n") (* preserve newlines *)
     | '"' ->
       advance ();
