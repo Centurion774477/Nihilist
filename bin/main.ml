@@ -24,6 +24,27 @@ let rec collapse_spaces tokens =
   | Other " " :: Other " " :: rest -> collapse_spaces (Other " " :: rest)
   | token :: rest -> token :: collapse_spaces rest
 
+(* this and insert_semis are for Automatic Semicolon Insertion*)
+let no_semi token =
+  match token with
+  | Other "{" | Other "}" | Other "[" | Other "(" 
+  | Other "+" | Other "-" | Other "*" | Other "/" 
+  | Other "%" | Other ":" | Comma | LParen -> true
+  | _ -> false
+
+let rec insert_semis tokens =
+  match tokens with
+  | [] -> []
+  | Other "&" :: Other "&" :: Other "\n" :: rest ->
+    Other "&" :: Other "&" :: Other "\n" :: insert_semis rest
+  | Other "|" :: Other "|" :: Other "\n" :: rest ->
+    Other "|" :: Other "|" :: Other "\n" :: insert_semis rest
+  | token :: Other "\n" :: rest when no_semi token ->
+    token :: Other "\n" :: insert_semis rest
+  | token :: Other "\n" :: rest ->
+    token :: Other ";" :: Other "\n" :: insert_semis rest
+  | token :: rest -> token :: insert_semis rest
+
 (* 
 tokenize, 
 find declarations,
@@ -34,6 +55,7 @@ let compile file output =
     |> read_file
     |> Lexer.tokenize
     |> collapse_spaces
+    |> insert_semis
   in
 
   print_endline "Tokens:";

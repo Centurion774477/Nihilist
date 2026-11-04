@@ -6,6 +6,7 @@ let rec collect_args tokens args =
   match tokens with
   | [] -> (List.rev args, [])
   | Other "\n" :: rest -> (List.rev args, Other "\n" :: rest)
+  | Other ";" :: rest -> (List.rev args, Other ";" :: rest)
   | Comma :: rest -> collect_args rest args
   | Other " " :: rest -> collect_args rest args
   | token :: rest -> collect_args rest (Raw token :: args)

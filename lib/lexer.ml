@@ -78,7 +78,7 @@ in
       done;
       advance ();
       only_emit (StringLiteral (Buffer.contents buf))
-    | c   -> emit (Token.Other (String.make 1 c))
+    | c -> emit (Token.Other (String.make 1 c))
   done;
 
   List.rev !tokens
