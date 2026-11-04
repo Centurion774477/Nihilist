@@ -46,6 +46,10 @@ let rec parse tokens declarations =
   | Ident name :: Bang :: rest ->
     Call (name, []) :: parse rest declarations
 
+  (* `func void {` — function declaration without args *)
+  | Func :: Other " " :: Ident name :: Other " " :: Other "{" :: rest ->
+    Decl (name, []) :: parse rest declarations
+
   (* function declarations *)
   | Func :: Other " " :: Ident name :: rest ->
     let (line, remaining) = collect_line rest in

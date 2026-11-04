@@ -54,8 +54,8 @@ let compile file output =
   let tokens = file
     |> read_file
     |> Lexer.tokenize
-    |> collapse_spaces
-    |> insert_semis
+    |> collapse_spaces (* Make parsing easier — combine multiple spaces into one *)
+    |> insert_semis (* Automatic Semicolon Insertion*)
   in
 
   print_endline "Tokens:";
