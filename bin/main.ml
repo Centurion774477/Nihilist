@@ -103,13 +103,21 @@ let () =
 
   let command = Sys.argv.(1) in
 
+  (* print my writing on nihilism *)
+  if command = "nihilism" then begin
+      read_file "nihilism.txt"
+      |> print_endline;
+      exit 0
+  end;
+
+  (* safely get the input file *)
   let file =
-    if is_filename command then command
-    else
-      try Sys.argv.(2)
-      with Invalid_argument _ ->
-        print_endline "Please provide a file to process.";
-        exit 1
+  if is_filename command then command
+  else
+    try Sys.argv.(2)
+    with Invalid_argument _ ->
+      print_endline "Please provide a file to process.";
+      exit 1
   in
 
   (* get output file from either the user or from the existing file *)
@@ -139,16 +147,3 @@ let () =
     let formatted_lines = compile file output_file in
     write_out formatted_lines output_file
   end;
-
-  (* 
-  parse commands normally
-  — transform this into a `match .. with` block when more commands are added
-  *)
-
-  (* print my writing on nihilism *)
-  if command = "nihilism" then begin
-    read_file "nihilism.txt"
-    |> print_endline;
-    exit 0
-  end;
-
