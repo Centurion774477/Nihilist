@@ -49,7 +49,14 @@ in
       | "func" -> only_emit Func
       | _ -> only_emit (Ident word))
 
-      (* only_emit (Token.Ident (Buffer.contents buf)) *)
+      
+    | '0'..'9' ->
+      let buf = Buffer.create 16 in
+      while peek () >= '0' && peek () <= '9' do
+        Buffer.add_char buf (peek ());
+        advance ()
+      done;
+      only_emit (Number (Buffer.contents buf))
     | ' ' -> emit (Other " ") (* preserve spaces *)
     | '\t' -> emit (Other "\t") (* preserve tabs *)
     | '\n' -> emit (Other "\n") (* preserve newlines *)

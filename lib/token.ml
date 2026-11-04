@@ -1,6 +1,7 @@
 
 type token =
   | Ident of string
+  | Number of string
   | Bang (* ! *)
   | LParen
   | Dot (* . *)
@@ -19,6 +20,7 @@ let to_string token =
   | Dot -> "Dot"
   | Comma -> "Comma"
   | Ident s -> "Ident(" ^ s ^ ")"
+  | Number n -> "Number(" ^ n ^ ")"
   | Func -> "Function declaration"
   | StringLiteral s -> "Literal(" ^ s ^ ")"
   | Other s -> "Other(" ^ s ^ ")"
@@ -26,6 +28,7 @@ let to_string token =
 let to_source token =
   match token with
   | Ident s -> s
+  | Number n -> n
   | Bang -> "!"
   | LParen -> "("
   | RParen -> ")"
