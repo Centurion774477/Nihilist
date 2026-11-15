@@ -32,6 +32,10 @@ let rec parse tokens declarations =
   | Ident var :: Dot :: Ident mthd :: Bang :: rest ->
     MethodCall (var, mthd, []) :: parse rest declarations
 
+  (* Method call with question mark — string.blank? *)
+  | Ident var :: Dot :: Ident mthd :: Question :: rest ->
+    MethodCall (var, mthd, []) :: parse rest declarations
+
   (* Function call with args *)
   | Ident name :: Other " " :: rest when List.mem name declarations ->
     let (args, remaining) = collect_args rest [] in
@@ -44,6 +48,10 @@ let rec parse tokens declarations =
 
   (* function call with bang — loveFinland! *)
   | Ident name :: Bang :: rest ->
+    Call (name, []) :: parse rest declarations
+
+  (* function call with question mark — logged_in? *)
+  | Ident name :: Question :: rest ->
     Call (name, []) :: parse rest declarations
 
   (* `func void {` — function declaration without args *)

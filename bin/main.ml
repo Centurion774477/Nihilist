@@ -25,6 +25,8 @@ let rec collapse_spaces tokens =
   | token :: rest -> token :: collapse_spaces rest
 
 (* this and insert_semis are for Automatic Semicolon Insertion*)
+
+(* token doesn't need a semicolon *)
 let no_semi token =
   match token with
   | Other "{" | Other "}" | Other "[" | Other "(" 

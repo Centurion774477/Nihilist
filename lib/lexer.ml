@@ -32,6 +32,7 @@ in
   while !index < String.length source do
     match peek () with
     | '!' -> emit Bang
+    | '?' -> emit Question
     | '(' -> emit LParen
     | ')' -> emit RParen
     | '.' -> emit Dot

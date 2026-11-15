@@ -3,6 +3,7 @@ type token =
   | Ident of string
   | Number of string
   | Bang (* ! *)
+  | Question (* ? *)
   | LParen
   | Dot (* . *)
   | RParen
@@ -15,6 +16,7 @@ type token =
 let to_string token =
   match token with
   | Bang -> "Bang"
+  | Question -> "Question Mark"
   | LParen -> "LParen"
   | RParen -> "RParen"
   | Dot -> "Dot"
@@ -30,6 +32,7 @@ let to_source token =
   | Ident s -> s
   | Number n -> n
   | Bang -> "!"
+  | Question -> "?"
   | LParen -> "("
   | RParen -> ")"
   | Dot -> "."

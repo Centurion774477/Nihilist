@@ -7,14 +7,14 @@ let rec ast_walker (nodes : node list) : string list =
   
   match nodes with
   | [] -> []
-  (* bang function call; no arguments *)
+  (* bang/question mark function call; no arguments *)
   | Call (name, []) :: rest -> (name ^ "()") :: ast_walker rest
 
   (* normal function call  *)
   | Call (name, args) :: rest ->
     (name ^ "(" ^ format_args args ^ ")") :: ast_walker rest
 
-  (* bang method call *)
+  (* bang/question mark method call *)
   | MethodCall (name, mthd, []) :: rest -> (name ^ "." ^ mthd ^ "()") :: ast_walker rest
 
   (* normal method call *)
