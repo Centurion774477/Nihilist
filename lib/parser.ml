@@ -2,14 +2,18 @@
 open Token
 open Ast
 
-let rec collect_args tokens args =
+let rec collect_args tokens args declarations =
   match tokens with
   | [] -> (List.rev args, [])
   | Other "\n" :: rest -> (List.rev args, Other "\n" :: rest)
   | Other ";" :: rest -> (List.rev args, Other ";" :: rest)
-  | Comma :: rest -> collect_args rest args
-  | Other " " :: rest -> collect_args rest args
-  | token :: rest -> collect_args rest (Raw token :: args)
+  | Comma :: rest -> collect_args rest args declarations
+  | Other " " :: rest -> collect_args rest args declarations
+  | Ident name :: LParen :: rest when List.mem name declarations ->
+    let (inner_args, remaining) = collect_args rest [] declarations in
+    collect_args remaining (Call (name, inner_args) :: args) declarations
+  | RParen :: rest -> (List.rev args, rest)
+  | token :: rest -> collect_args rest (Raw token :: args) declarations
 
 let rec skip_to_newline tokens =
   match tokens with
@@ -38,12 +42,12 @@ let rec parse tokens declarations =
 
   (* Function call with args *)
   | Ident name :: Other " " :: rest when List.mem name declarations ->
-    let (args, remaining) = collect_args rest [] in
+    let (args, remaining) = collect_args rest [] declarations in
     Call (name, args) :: parse remaining declarations
 
   (* Method call with args — string.contains "substring" *)
   | Ident var :: Dot :: Ident mthd :: rest ->
-    let (args, remaining) = collect_args rest [] in
+    let (args, remaining) = collect_args rest [] declarations in
     MethodCall (var, mthd, args) :: parse remaining declarations
 
   (* function call with bang — loveFinland! *)
