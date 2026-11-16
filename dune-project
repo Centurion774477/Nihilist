@@ -7,18 +7,18 @@
 (source
  (github username/reponame))
 
-(authors "Author Name <author@example.com>")
+(authors "Reece Turner reeceturner1358@gmail.com")
 
-(maintainers "Maintainer Name <maintainer@example.com>")
+(maintainers "Reece Turner reeceturner1358@gmail.com")
 
-(license LICENSE)
+(license Proprietary)
 
-(documentation https://url/to/documentation)
+(documentation https://github.com/Centurion774477/Nihilist/blob/main/readme.md#features)
 
 (package
  (name nihilist)
- (synopsis "A short synopsis")
- (description "A longer description")
+ (synopsis "Write code your way.")
+ (description "A KrabbaScript preprocessor")
  (depends ocaml)
  (tags
   ("add topics" "to describe" your project)))
