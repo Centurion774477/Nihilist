@@ -80,10 +80,10 @@ Another thing to know is that you can only omit parens at the top level — you 
 add 2, add 2, 2
 ```
 
-Sadly, you cannot write that statement at all — you will have to fall back to normal KrabbaScript for that:
+Any nested functions need to be wrapped in parens, for example:
 
 ```
-add(2, add(2, 2))
+add 2, add(2, 2)
 ```
 
 ## Omitting parens in zero-arity function declarations
@@ -133,6 +133,13 @@ add(2, 2);
 ```
 
 No need to use the `format` command or `--format` flag in the KrabbaScript compiler.
+
+<hr>
+
+Another thing to know is that Nihilist will not throw an error, unless somehow you encounter a runtime error with the code.
+
+That means if you define a function with an arity of two and only pass one argument, Nihilist will happily compile it and you'll
+only realize your mistake when you build the code with KrabbaScript.
 
 <hr>
 
