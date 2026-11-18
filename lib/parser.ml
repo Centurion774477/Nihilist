@@ -5,15 +5,18 @@ open Ast
 let rec collect_args tokens args declarations =
   match tokens with
   | [] -> (List.rev args, [])
+
   | Other "\n" :: rest -> (List.rev args, Other "\n" :: rest)
-  | Other ";" :: rest -> (List.rev args, Other ";" :: rest)
-  | Comma :: rest -> collect_args rest args declarations
-  | Other " " :: rest -> collect_args rest args declarations
+  | Other ";" :: rest  -> (List.rev args, Other ";" :: rest)
+  | Comma :: rest      -> collect_args rest args declarations
+  | Other " " :: rest  -> collect_args rest args declarations
+
   | Ident name :: LParen :: rest when List.mem name declarations ->
     let (inner_args, remaining) = collect_args rest [] declarations in
     collect_args remaining (Call (name, inner_args) :: args) declarations
+
   | RParen :: rest -> (List.rev args, rest)
-  | token :: rest -> collect_args rest (Raw token :: args) declarations
+  | token :: rest  -> collect_args rest (Raw token :: args) declarations
 
 let rec skip_to_newline tokens =
   match tokens with
@@ -70,4 +73,3 @@ let rec parse tokens declarations =
   (* catchall *)
   | token :: rest -> Raw token :: parse rest declarations
   
-    

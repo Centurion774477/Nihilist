@@ -46,16 +46,24 @@ let no_semi token =
 let rec insert_semis tokens =
   match tokens with
   | [] -> []
+  (* operators *)
   | Other "&" :: Other "&" :: Other "\n" :: rest ->
     Other "&" :: Other "&" :: Other "\n" :: insert_semis rest
+
   | Other "|" :: Other "|" :: Other "\n" :: rest ->
     Other "|" :: Other "|" :: Other "\n" :: insert_semis rest
+
+  (* skip lines that don't need a semicolon *)
   | token :: Other "\n" :: rest when no_semi token ->
     token :: Other "\n" :: insert_semis rest
+
   | token :: Other "\n" :: rest ->
     token :: Other ";" :: Other "\n" :: insert_semis rest
+
+  (* the line already ends with a semicolon *)
   | token :: Other ";" :: Other "\n" :: rest ->
     token :: Other ";" :: Other "\n" :: insert_semis rest
+
   | token :: rest -> token :: insert_semis rest
 
 (* 
@@ -72,16 +80,11 @@ let compile file output =
     |> insert_semis (* Automatic Semicolon Insertion*)
   in
 
-  let raw_tokens = file
-    |> read_file
-    |> Lexer.tokenize
-    |> collapse_spaces (* Make parsing easier — combine multiple spaces into one *)
-  in
-
-  print_endline "Raw Tokens:";
-  raw_tokens
+  (* debug tokens *)
+  (* print_endline "Tokens:";
+  tokens
   |> List.map Token.to_string
-  |> List.iter print_endline;
+  |> List.iter print_endline; *)
 
   let declarations = Declarations.find_declarations tokens in
     print_endline "Declarations:"; List.iter print_endline declarations;

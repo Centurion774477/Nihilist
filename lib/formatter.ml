@@ -26,4 +26,6 @@ let rec ast_walker (nodes : node list) : string list =
   
   (* function declaration *)
   | Decl (name, args) :: rest -> ("func " ^ name ^ "(" ^ format_args args ^ ") {") :: ast_walker rest
+
+  (* normal KrabbaScript *)
   | Raw token :: rest -> (Token.to_source token) :: ast_walker rest

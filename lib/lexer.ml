@@ -27,7 +27,7 @@ let tokenize (source : string) : token list =
   let is_ident_char c = match c with
   | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_' -> true
   | _ -> false
-in
+  in
 
   while !index < String.length source do
     match peek () with
@@ -48,7 +48,9 @@ in
       let word = Buffer.contents buf in
       (match word with
       | "func" -> only_emit Func
-      | _ -> only_emit (Ident word))
+      | "then"   -> only_emit (Other "{")
+      | "end"  -> only_emit (Other "}")
+      | _      -> only_emit (Ident word))
 
       
     | '0'..'9' ->
@@ -57,11 +59,12 @@ in
         Buffer.add_char buf (peek ());
         advance ()
       done;
-      only_emit (Number (Buffer.contents buf))
-    | ' ' -> emit (Other " ") (* preserve spaces *)
+      only_emit @@ Number (Buffer.contents buf)
+      
+    | ' '  -> emit (Other " ") (* preserve spaces *)
     | '\t' -> emit (Other "\t") (* preserve tabs *)
     | '\n' -> emit (Other "\n") (* preserve newlines *)
-    | '"' ->
+    | '"'  ->
       advance ();
       let buf = Buffer.create 16 in
       while peek () <> '"' do
@@ -69,7 +72,8 @@ in
         advance ()
       done;
       advance ();
-      only_emit (StringLiteral (Buffer.contents buf))
+      only_emit @@ StringLiteral (Buffer.contents buf)
+
     | '\'' ->
       advance ();
       let buf = Buffer.create 16 in
@@ -78,13 +82,16 @@ in
         advance ()
       done;
       advance ();
-      only_emit (StringLiteral (Buffer.contents buf))
+      only_emit @@ StringLiteral (Buffer.contents buf)
+
     | '#' ->
       advance ();
       while peek () != '\n' && peek () != '\000' do
         advance ()
       done;
-    | c -> emit (Token.Other (String.make 1 c))
+
+    | c -> emit @@ Token.Other (String.make 1 c)
   done;
 
   List.rev !tokens
+  
