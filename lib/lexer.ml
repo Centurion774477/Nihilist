@@ -48,8 +48,10 @@ let tokenize (source : string) : token list =
       let word = Buffer.contents buf in
       (match word with
       | "func" -> only_emit Func
-      | "then"   -> only_emit (Other "{")
+      | "then" -> only_emit (Other "{")
       | "end"  -> only_emit (Other "}")
+      | "is"   -> only_emit (Other "==")
+      | "isnt" -> only_emit (Other "!=")
       | _      -> only_emit (Ident word))
 
       
