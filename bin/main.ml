@@ -24,6 +24,14 @@ let rec collapse_spaces tokens =
   | Other " " :: Other " " :: rest -> collapse_spaces (Other " " :: rest)
   | token :: rest -> token :: collapse_spaces rest
 
+(* remove blank newlines *)
+let rec collapse_newlines tokens =
+  match tokens with
+  | [] -> []
+  | Other "\n" :: Other "\n" :: rest ->
+    collapse_newlines (Other "\n" :: rest)
+  | token :: rest -> token :: collapse_newlines rest
+
 (* this and insert_semis are for Automatic Semicolon Insertion*)
 
 (* token doesn't need a semicolon *)
@@ -31,7 +39,8 @@ let no_semi token =
   match token with
   | Other "{" | Other "}" | Other "[" | Other "(" 
   | Other "+" | Other "-" | Other "*" | Other "/" 
-  | Other "%" | Other ":" | Comma | LParen -> true
+  | Other "%" | Other ":" | Other " " | Other "\t" 
+  | Other "\n" | Comma | LParen -> true
   | _ -> false
 
 let rec insert_semis tokens =
@@ -45,6 +54,8 @@ let rec insert_semis tokens =
     token :: Other "\n" :: insert_semis rest
   | token :: Other "\n" :: rest ->
     token :: Other ";" :: Other "\n" :: insert_semis rest
+  | token :: Other ";" :: Other "\n" :: rest ->
+    token :: Other ";" :: Other "\n" :: insert_semis rest
   | token :: rest -> token :: insert_semis rest
 
 (* 
@@ -57,11 +68,18 @@ let compile file output =
     |> read_file
     |> Lexer.tokenize
     |> collapse_spaces (* Make parsing easier — combine multiple spaces into one *)
+    |> collapse_newlines
     |> insert_semis (* Automatic Semicolon Insertion*)
   in
 
-  print_endline "Tokens:";
-  tokens
+  let raw_tokens = file
+    |> read_file
+    |> Lexer.tokenize
+    |> collapse_spaces (* Make parsing easier — combine multiple spaces into one *)
+  in
+
+  print_endline "Raw Tokens:";
+  raw_tokens
   |> List.map Token.to_string
   |> List.iter print_endline;
 

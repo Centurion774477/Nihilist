@@ -79,6 +79,11 @@ in
       done;
       advance ();
       only_emit (StringLiteral (Buffer.contents buf))
+    | '#' ->
+      advance ();
+      while peek () != '\n' && peek () != '\000' do
+        advance ()
+      done;
     | c -> emit (Token.Other (String.make 1 c))
   done;
 
