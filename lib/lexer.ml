@@ -52,6 +52,8 @@ let tokenize (source : string) : token list =
       | "end"  -> only_emit (Other "}")
       | "is"   -> only_emit (Other "==")
       | "isnt" -> only_emit (Other "!=")
+      | "or"   -> only_emit (Other "||")
+      | "and"  -> only_emit (Other "&&")
       | _      -> only_emit (Ident word))
 
       
